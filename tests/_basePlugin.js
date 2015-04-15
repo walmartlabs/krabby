@@ -2,12 +2,11 @@ var glob = require('globby');
 var isGlob = require('is-glob');
 var _ = require('lodash');
 
-function _BaseKeabbyPlugin(baseConfig) {
+function _BaseKeabbyTest(baseConfig) {
 
-  var krabbyPlugin = function(config) {
+  var krabbyTest = function(config) {
     this.config = _.extend(baseConfig, config);
-    this.score = undefined;
-    this.weight = 1;
+    this.grade = 1;
 
     this.logs = {
       errors: [],
@@ -21,16 +20,12 @@ function _BaseKeabbyPlugin(baseConfig) {
     }
   };
 
-  krabbyPlugin.prototype.test = function() {
-    throw new Error('no test defined for plugin');
+  krabbyTest.prototype.test = function() {
+    throw new Error('no test defined for test');
   };
 
-  krabbyPlugin.prototype.grade = function() {
-    throw new Error('no grader defined for plugin');
-  };
-
-  return krabbyPlugin;
+  return krabbyTest;
 
 }
 
-module.exports = _BaseKeabbyPlugin;
+module.exports = _BaseKeabbyTest;

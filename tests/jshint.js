@@ -1,15 +1,15 @@
-var krabbyPlugin = require('./_basePlugin');
+var krabbyTest = require('./_baseTest');
 var jshint = require('jshint').JSHINT;
 var Async = require('async');
 var FS = require('fs');
 
 var baseConfig = {
-  pluginConfig: {
+  testConfig: {
   },
   files: ['./**/*.js', '!./node_modules/**/*.js', '!./**/node_modules/**/*.js']
 };
 
-var JSHintTest = new krabbyPlugin(baseConfig);
+var JSHintTest = new krabbyTest(baseConfig);
 
 JSHintTest.prototype.lint = function(file, cb) {
   var self = this;
@@ -19,7 +19,7 @@ JSHintTest.prototype.lint = function(file, cb) {
       return cb(err);
     }
 
-    var result = jshint(data.toString(), self.config.pluginConfig);
+    var result = jshint(data.toString(), self.config.testConfig);
 
     if (!result) {
 
@@ -43,18 +43,18 @@ JSHintTest.prototype.test = function(cb) {
   });
 
   Async.parallel(tests, function(err, results) {
-    self.grade.call(self, self, cb);
+    self.process.call(self, self, cb);
   });
 };
 
-JSHintTest.prototype.grade = function(results, cb) {
+JSHintTest.prototype.process = function(results, cb) {
   // lets be optimistic...
-  var score = 1;
+  var grade = 1;
 
   if (results.logs.errors.length > 0) {
     // automatic F for failures, but at least they aren't failing so badly we
     // have to actually give up
-    score = Math.min(score, 0.5);
+    grade = Math.min(grade, 0.5);
   }
 
   var tooMany = results.logs.errors.some(function(errs) {
@@ -66,10 +66,10 @@ JSHintTest.prototype.grade = function(results, cb) {
 
   if (tooMany) {
     // oh - they are fialing that bad? Ok. Goose egg it is
-    score = 0;
+    grade = 0;
   }
 
-  results.score = score;
+  results.grade = grade;
   cb(null, results);
 };
 
