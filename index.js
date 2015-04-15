@@ -6,7 +6,7 @@ var _ = require('lodash');
 var FS = require('fs');
 var parentDir;
 var reports;
-var plugins;
+var tests;
 var config;
 var pkg;
 
@@ -43,29 +43,29 @@ if (argv.config) {
 
 if (!config) {
   throw new Error('no krabby config found. what do you expect to happen?');
-} else if (!config.plugins) {
-  throw new Error('you did\'t define any krabby plugins. great job.');
+} else if (!config.tests) {
+  throw new Error('you did\'t define any krabby tests. great job.');
 } else if (!config.reports) {
   throw new Error('you did\'t define any krabby reports. great job.');
 }
 
-plugins = config.plugins.map(function(plugin) {
-  var pluginName;
+tests = config.tests.map(function(test) {
+  var testName;
   var config = {};
 
-  if (typeof plugin === 'string') {
-    pluginName = plugin;
+  if (typeof test === 'string') {
+    testName = test;
   } else {
-    pluginName = plugin.name;
+    testName = test.name;
 
-    config = plugin;
+    config = test;
   }
 
-  var Plugin = require(Path.join(__dirname, 'plugins', pluginName));
+  var Test = require(Path.join(__dirname, 'tests', testName));
 
-  plugin = new Plugin(config);
+  test = new Test(config);
 
-  return plugin.test.bind(plugin);
+  return test.test.bind(test);
 });
 
 reports = config.reports.map(function(report) {
@@ -83,8 +83,8 @@ reports = config.reports.map(function(report) {
 });
 
 
-var grade = function(cb) {
-  async.parallel(plugins, function(err, results) {
+var test = function(cb) {
+  async.parallel(tests, function(err, results) {
     cb.apply(this, arguments);
   });
 };
@@ -106,6 +106,6 @@ var report = function() {
   });
 };
 
-async.waterfall([grade, report], function(result) {
+async.waterfall([test, report], function(result) {
   console.log(result);
 });
