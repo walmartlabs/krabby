@@ -36,7 +36,7 @@ The only fields that are required are `tests` and `reports`. Each take an array 
   "krabby": {
     "tests": [ {
       "name": "jshint",
-      "files": ["./**/*.js", "!./node_module"],
+      "files": ["./**/*.js", "!./node_module/**/*"],
       "testConfig": {
         "browser": true
       }

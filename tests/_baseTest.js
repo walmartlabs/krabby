@@ -1,4 +1,4 @@
-var glob = require('globby');
+var globby = require('globby');
 var isGlob = require('is-glob');
 var _ = require('lodash');
 
@@ -16,7 +16,7 @@ function _BaseKeabbyTest(baseConfig) {
     };
 
     if (this.config.files && this.config.files.some(isGlob)) {
-      this.config.files = glob.sync(this.config.files, {nodir: true});
+      this.config.files = globby.sync(this.config.files, {nodir: true});
     }
   };
 
