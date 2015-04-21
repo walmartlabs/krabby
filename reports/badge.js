@@ -1,3 +1,6 @@
+var BaseKrabbyReport = require('./_baseReport');
+var baseConfig = {};
+
 function badge(results, cb) {
   var grade = results.reduce(function(total, result) {
     return total + (result.grade || 0);
@@ -21,4 +24,4 @@ function badge(results, cb) {
   cb(url += '.svg');
 }
 
-module.exports = badge;
+module.exports = new BaseKrabbyReport(baseConfig, badge);

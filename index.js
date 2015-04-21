@@ -70,14 +70,17 @@ tests = config.tests.map(function(test) {
 
 reports = config.reports.map(function(report) {
   var reportName;
+  var config = {};
 
   if (typeof report === 'string') {
     reportName = report;
   } else {
     reportName = report.name;
+    config = report;
   }
 
   report = require(Path.join(__dirname, 'reports', reportName));
+  report = report(config);
 
   return report;
 });
@@ -95,7 +98,7 @@ var report = function() {
   var cb = args.pop();
 
   // curry the reporters so they get a consistent argument signature
-  reports = reports.map(function(report, i) {
+  reports = reports.map(function(report) {
     return function() {
       report.call(report, _.flatten(args), cb);
     };
