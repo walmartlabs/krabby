@@ -1,9 +1,12 @@
-## krabby
-a code conformance module runner.
+<h1 align="center">krabby</h1>
+<h4 align="center">
+  a code conformance module runner.
+</h4>
 
 ![edna](https://cloud.githubusercontent.com/assets/465414/7166524/3ceb63e2-e37c-11e4-8bde-528c6284e062.png)
 
-### what?
+
+## what?
 krabby is an extremely unopinionated module runner, similar to [Gulp](http://gulpjs.com/) or [Grunt](http://gruntjs.com/), but rather than helping create your build, it grades it based on tests and rules that you define.
 
 You pick and choose the tests that you want to use to test your code, and another set of tests you use to grade the results. This gives you the ability to check your code's quality from the biggest of pictures down to the finest of detail.
