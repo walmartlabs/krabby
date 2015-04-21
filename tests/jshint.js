@@ -43,7 +43,7 @@ JSHintTest.prototype.test = function(cb) {
   });
 
   Async.parallel(tests, function(err, results) {
-    self.process.call(self, self, cb);
+    self.process.call(self, results, cb);
   });
 };
 
