@@ -5,7 +5,7 @@ var _ = require('lodash');
 function _BaseKrabbyTest(baseConfig) {
 
   var krabbyTest = function(config) {
-    this.config = _.extend({}, baseConfig, config);
+    this.config = _.merge({}, baseConfig, config);
     this.grade = 1;
 
     this.logs = {
