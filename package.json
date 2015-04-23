@@ -5,7 +5,7 @@
   "main": "index.js",
   "bin": "index.js",
   "scripts": {
-    "test": "mocha --opts spec/mocha.opts spec"
+    "test": "mocha --recursive --require spec/setup.js spec"
   },
   "author": "",
   "license": "ISC",
