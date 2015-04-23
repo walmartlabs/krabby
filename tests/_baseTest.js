@@ -2,10 +2,10 @@ var globby = require('globby');
 var isGlob = require('is-glob');
 var _ = require('lodash');
 
-function _BaseKeabbyTest(baseConfig) {
+function _BaseKrabbyTest(baseConfig) {
 
   var krabbyTest = function(config) {
-    this.config = _.extend(baseConfig, config);
+    this.config = _.extend({}, baseConfig, config);
     this.grade = 1;
 
     this.logs = {
@@ -28,4 +28,4 @@ function _BaseKeabbyTest(baseConfig) {
 
 }
 
-module.exports = _BaseKeabbyTest;
+module.exports = _BaseKrabbyTest;
