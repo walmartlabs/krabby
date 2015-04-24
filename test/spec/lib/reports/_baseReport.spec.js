@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var _baseReport = require('../../reports/_baseReport.js');
+var _baseReport = require('../../../../lib/reports/_baseReport.js');
 
 describe("tests/_baseReport", function () {
   describe('configuration', function() {

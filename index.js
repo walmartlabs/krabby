@@ -61,7 +61,7 @@ tests = config.tests.map(function(test) {
     config = test;
   }
 
-  var Test = require(Path.join(__dirname, 'tests', testName));
+  var Test = require(Path.join(__dirname, 'lib/tests', testName));
 
   test = new Test(config);
 
@@ -79,7 +79,7 @@ reports = config.reports.map(function(report) {
     config = report;
   }
 
-  report = require(Path.join(__dirname, 'reports', reportName));
+  report = require(Path.join(__dirname, 'lib/reports', reportName));
   report = report(config);
 
   return report;
