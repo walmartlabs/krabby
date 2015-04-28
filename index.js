@@ -49,47 +49,33 @@ if (!config) {
   throw new Error('you did\'t define any krabby reports. great job.');
 }
 
-tests = config.tests.map(function(test) {
-  var testName;
-  var config = {};
+var findPlugins = function(plugins, path, rootMethod) {
+  return plugins.map(function(plugin) {
+    var pluginName;
+    var config = {};
 
-  if (typeof test === 'string') {
-    testName = test;
-  } else {
-    testName = test.name;
-    config = test;
-  }
+    if (typeof plugin === 'string') {
+      pluginName = plugin;
+    } else {
+      pluginName = plugin.name;
+      config = plugin;
+    }
 
-  var Test = require(Path.join(__dirname, 'lib/tests', testName));
-  test = new Test(config);
+    var Plugin = require(Path.join(__dirname, path, pluginName));
+    plugin = new Plugin(config);
 
-  return test.test.bind(test);
-});
+    return plugin[rootMethod].bind(plugin);
+  });
+}
 
-reports = config.reports.map(function(report) {
-  var reportName;
-  var config = {};
-
-  if (typeof report === 'string') {
-    reportName = report;
-  } else {
-    reportName = report.name;
-    config = report;
-  }
-
-  Report = require(Path.join(__dirname, 'lib/reports', reportName));
-  report = new Report(config);
-
-  return report.report.bind(report);
-});
-
+tests = findPlugins(config.tests, 'lib/tests', "test");
+reports = findPlugins(config.reports, 'lib/reports', "report");
 
 var test = function(cb) {
   async.parallel(tests, function(err, results) {
     cb.apply(this, arguments);
   });
 };
-
 
 var report = function() {
   var args = Array.prototype.slice.call(arguments);
