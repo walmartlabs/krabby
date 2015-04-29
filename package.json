@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
-  "bin": "index.js",
+  "bin": "./bin/krabby.js",
   "scripts": {
     "test": "mocha --recursive --require test/setup.js test/spec"
   },

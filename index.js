@@ -1,50 +1,49 @@
-#!/usr/bin/env node
-
 var async = require('async');
 var Path = require('path');
 var _ = require('lodash');
 var FS = require('fs');
-var parentDir;
-var config;
-var pkg;
 
-var argv = require('yargs')
-  .alias('c', 'config')
-  .argv;
+var getOptions = function(options) {
+  var parentDir;
+  var pkg;
+  var config;
 
-if (!argv.config) {
+  // If no config is passed in find the project root
+  if (_.isEmpty(options)) {
+    if (FS.existsSync('package.json')) {
+      parentDir = process.cwd();
+    } else {
+      parentDir = require('find-parent-dir').sync(process.cwd(), 'package.json');
+    }
 
-  if (FS.existsSync('package.json')) {
-    parentDir = process.cwd();
-  } else {
-    parentDir = require('find-parent-dir').sync(process.cwd(), 'package.json');
+    if (!parentDir) {
+      throw new Error('can\'t find the root of the project. go find a package.json file');
+    }
+
+    pkg = require(Path.join(parentDir, 'package.json'));
   }
 
-  if (!parentDir) {
-    throw new Error('can\'t find the root of the project. go find a package.json file');
+  if (!_.isEmpty(options)) {
+    config = options;
+
+    if (config.krabby) {
+      config = config.krabby;
+    }
+  } else if (FS.existsSync(Path.join(parentDir, 'krabby.json'))) {
+    config = require(Path.join(parentDir, 'krabby.json'));
+  } else if (pkg.krabby) {
+    config = pkg.krabby;
   }
 
-  pkg = require(Path.join(parentDir, 'package.json'));
-}
-
-if (argv.config) {
-  config = require(Path.resolve(argv.config));
-
-  if (config.krabby) {
-    config = config.krabby;
+  if (_.isEmpty(config)) {
+    throw new Error('no krabby config found. what do you expect to happen?');
+  } else if (!_.isArray(config.tests)) {
+    throw new Error('you did\'t define any krabby tests. great job.');
+  } else if (!_.isArray(config.reports)) {
+    throw new Error('you did\'t define any krabby reports. great job.');
   }
-} else if (FS.existsSync(Path.join(parentDir, 'krabby.json'))) {
-  config = require(Path.join(parentDir, 'krabby.json'));
-} else if (pkg.krabby) {
-  config = pkg.krabby;
-}
 
-if (!config) {
-  throw new Error('no krabby config found. what do you expect to happen?');
-} else if (!config.tests) {
-  throw new Error('you did\'t define any krabby tests. great job.');
-} else if (!config.reports) {
-  throw new Error('you did\'t define any krabby reports. great job.');
+  return config;
 }
 
 var instantiatePlugins = function(plugins, path, rootMethod) {
@@ -58,17 +57,13 @@ var instantiatePlugins = function(plugins, path, rootMethod) {
   });
 }
 
-var test = function(cb) {
-  var tests = instantiatePlugins(config.tests, 'lib/tests', "test");
-
+var test = function(tests, cb) {
   async.parallel(tests, function(err, results) {
     cb.apply(this, arguments);
   });
 };
 
-var report = function() {
-  var reports = instantiatePlugins(config.reports, 'lib/reports', "report");
-
+var report = function(reports) {
   var args = Array.prototype.slice.call(arguments);
   var cb = args.pop();
 
@@ -84,6 +79,19 @@ var report = function() {
   });
 };
 
-async.waterfall([test, report], function(result) {
-  console.log(result);
+var run = function(options) {
+  var config = getOptions(options);
+  var tests = instantiatePlugins(config.tests, 'lib/tests', "test");
+  var reports = instantiatePlugins(config.reports, 'lib/reports', "report");
+
+  async.waterfall([_.partial(test, tests), _.partial(report, reports)], function(result) {
+    console.log(result);
+  });
+};
+
+module.exports = _.extend(run, {
+  _getOptions: getOptions,
+  _instantiatePlugins: instantiatePlugins,
+  _test: test,
+  _report: report
 });
