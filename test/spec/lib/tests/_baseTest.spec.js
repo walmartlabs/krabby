@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var _baseTest = require('../../../../lib/tests/_baseTest.js');
 
-describe("tests/_baseTest", function () {
+describe("lib/tests/_baseTest.js", function () {
   describe('configuration', function() {
     it('should create a config property when no config is passed in', function() {
       var FakeTester = _baseTest();
