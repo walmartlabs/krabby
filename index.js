@@ -5,8 +5,6 @@ var Path = require('path');
 var _ = require('lodash');
 var FS = require('fs');
 var parentDir;
-var reports;
-var tests;
 var config;
 var pkg;
 
@@ -68,16 +66,17 @@ var findPlugins = function(plugins, path, rootMethod) {
   });
 }
 
-tests = findPlugins(config.tests, 'lib/tests', "test");
-reports = findPlugins(config.reports, 'lib/reports', "report");
-
 var test = function(cb) {
+  var tests = findPlugins(config.tests, 'lib/tests', "test");
+
   async.parallel(tests, function(err, results) {
     cb.apply(this, arguments);
   });
 };
 
 var report = function() {
+  var reports = findPlugins(config.reports, 'lib/reports', "report");
+
   var args = Array.prototype.slice.call(arguments);
   var cb = args.pop();
 
