@@ -21,7 +21,8 @@
     "yargs": "^3.7.0"
   },
   "devDependencies": {
-    "mocha": "^2.2.4"
+    "mocha": "^2.2.4",
+    "sinon": "^1.14.1"
   },
   "krabby": {
     "tests": ["jshint"],
