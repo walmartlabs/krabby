@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var _baseReport = require('../../../../lib/reports/_baseReport.js');
 
-describe("tests/_baseReport", function () {
+describe("lib/reports/_baseReport.js", function () {
   describe('configuration', function() {
     it('should create a config property when no config is passed in', function() {
       var FakeReporter = _baseReport();
