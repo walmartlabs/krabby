@@ -5,8 +5,6 @@ var Path = require('path');
 var _ = require('lodash');
 var FS = require('fs');
 var parentDir;
-var reports;
-var tests;
 var config;
 var pkg;
 
@@ -49,51 +47,28 @@ if (!config) {
   throw new Error('you did\'t define any krabby reports. great job.');
 }
 
-tests = config.tests.map(function(test) {
-  var testName;
-  var config = {};
+var instantiatePlugins = function(plugins, path, rootMethod) {
+  return plugins.map(function(plugin) {
+    var pluginConfig = _.isString(plugin) ? { name: plugin } : plugin;
 
-  if (typeof test === 'string') {
-    testName = test;
-  } else {
-    testName = test.name;
+    var Plugin = require(Path.join(__dirname, path, pluginConfig.name));
+    var pluginInstance = new Plugin(pluginConfig);
 
-    config = test;
-  }
-
-  var Test = require(Path.join(__dirname, 'lib/tests', testName));
-
-  test = new Test(config);
-
-  return test.test.bind(test);
-});
-
-reports = config.reports.map(function(report) {
-  var reportName;
-  var config = {};
-
-  if (typeof report === 'string') {
-    reportName = report;
-  } else {
-    reportName = report.name;
-    config = report;
-  }
-
-  report = require(Path.join(__dirname, 'lib/reports', reportName));
-  report = report(config);
-
-  return report;
-});
-
+    return pluginInstance[rootMethod].bind(pluginInstance);
+  });
+}
 
 var test = function(cb) {
+  var tests = instantiatePlugins(config.tests, 'lib/tests', "test");
+
   async.parallel(tests, function(err, results) {
     cb.apply(this, arguments);
   });
 };
 
-
 var report = function() {
+  var reports = instantiatePlugins(config.reports, 'lib/reports', "report");
+
   var args = Array.prototype.slice.call(arguments);
   var cb = args.pop();
 
