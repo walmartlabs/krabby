@@ -5,7 +5,7 @@
   "main": "index.js",
   "bin": "./bin/krabby.js",
   "scripts": {
-    "test": "mocha --recursive --require test/setup.js test/spec"
+    "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive --require test/setup.js test/spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "homepage": "https://github.com/patrickkettner/krabby",
   "bugs": {
@@ -17,12 +17,15 @@
   "dependencies": {
     "async": "^0.9.0",
     "bluebird": "^2.9.24",
+    "coveralls": "^2.11.2",
     "escomplex-js": "^1.2.0",
     "find-parent-dir": "^0.3.0",
     "globby": "^2.0.0",
     "is-glob": "^1.1.3",
+    "istanbul": "^0.3.14",
     "jshint": "^2.6.3",
     "lodash": "^3.7.0",
+    "mocha-lcov-reporter": "0.0.2",
     "yargs": "^3.7.0"
   },
   "devDependencies": {
