@@ -46,19 +46,18 @@ var getOptions = function(options) {
   return config;
 }
 
-var instantiatePlugins = function(plugins, path, rootMethod) {
+var instantiatePlugins = function(plugins, path) {
   return plugins.map(function(plugin) {
     var pluginConfig = _.isString(plugin) ? { name: plugin } : plugin;
 
     var Plugin = require(Path.join(__dirname, path, pluginConfig.name));
-    var pluginInstance = new Plugin(pluginConfig);
-
-    return pluginInstance[rootMethod].bind(pluginInstance);
+    return new Plugin(pluginConfig);
   });
 }
 
 var test = function(tests, cb) {
-  async.parallel(tests, function(err, results) {
+  var testFunctions = tests.map(function(test) { return test.test.bind(test); });
+  async.parallel(testFunctions, function(err, results) {
     cb.apply(this, arguments);
   });
 };
@@ -68,7 +67,8 @@ var report = function(reports) {
   var cb = args.pop();
 
   // curry the reporters so they get a consistent argument signature
-  reports = reports.map(function(report) {
+  var reportFunctions = reports.map(function(report) { return report.report.bind(report); });
+  reports = reportFunctions.map(function(report) {
     return function() {
       report.call(report, _.flatten(args), cb);
     };
@@ -81,8 +81,8 @@ var report = function(reports) {
 
 var run = function(options) {
   var config = getOptions(options);
-  var tests = instantiatePlugins(config.tests, 'lib/tests', "test");
-  var reports = instantiatePlugins(config.reports, 'lib/reports', "report");
+  var tests = instantiatePlugins(config.tests, 'lib/tests');
+  var reports = instantiatePlugins(config.reports, 'lib/reports');
 
   async.waterfall([_.partial(test, tests), _.partial(report, reports)], function(result) {
     console.log(result);
