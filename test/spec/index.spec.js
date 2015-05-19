@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var krabby = require('../../index.js');
-var JsHint = require('../../lib/tests/jshint.js');
+var JsHint = require('../../lib/testers/jshint.js');
 
 describe('index.js', function() {
   describe('_getOptions', function() {
@@ -45,7 +45,7 @@ describe('index.js', function() {
   });
   describe('_instantiatePlugins', function() {
     it('returns an Array of instantiated plugins', function() {
-      var tests = krabby._instantiatePlugins(['jshint'], 'lib/tests');
+      var tests = krabby._instantiatePlugins(['jshint'], 'lib/testers');
 
       assert(_.isArray(tests));
       assert(tests[0] instanceof JsHint);

@@ -1,6 +1,6 @@
 var _ = require('lodash');
-var CoverageExcludes = require('../../../../lib/tests/coverageExcludes.js');
-var BaseTest = require('../../../../lib/tests/_baseTest.js')();
+var CoverageExcludes = require('../../../../lib/testers/coverageExcludes.js');
+var BaseTest = require('../../../../lib/testers/_baseTest.js')();
 
 var noCoverageExcludes = {};
 var oneCoverageExclude = {
@@ -38,7 +38,7 @@ var twentyCoverageExclude = {
   }
 };
 
-describe("tests/coverageExcludes.js", function () {
+describe("testers/coverageExcludes.js", function () {
   describe('gradeResults', function() {
     it('grades repo with no excludes as 1', function() {
       var coverageExcludes = new CoverageExcludes();

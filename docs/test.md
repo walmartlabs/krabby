@@ -6,10 +6,10 @@ all krabby tests should follow the [unix philosophy](http://en.wikipedia.org/wik
 
 #### step 1
 
-all krabby tests should use the [`_baseTest`](https://github.com/patrickkettner/krabby/blob/master/tests/_baseTest.js) as a constructor, passing in any kind of default configuration it wants to have.
+all krabby tests should use the [`_baseTest`](https://github.com/patrickkettner/krabby/blob/master/testers/_baseTest.js) as a constructor, passing in any kind of default configuration it wants to have.
 
 ```javascript
-var krabbyTest = require('krabby/tests/_baseTest');
+var krabbyTest = require('krabby/testers/_baseTest');
 var defaultConfig = {
   files: ["./foo/**/*.bar"]
 }
