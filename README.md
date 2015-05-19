@@ -67,13 +67,13 @@ The only fields that are required are `tests` and `reports`. Each take an array 
 The only difference being you need to pass the name of the test in the `name` key. Each test can take different option (some don't operate on files, so they have no use for a `files` parameter, for example), but all tests should conform to the following basics
 
 #### name - _required_
-The only thing that is actually _required_, the `name` parameter represents the file name of each test. This means either the files listed in the included [tests directory](https://github.com/patrickkettner/krabby/tree/master/tests), or any module installed with a `krabby-` prefix (e.g. `jshint` means either the file in `tests/jshint.js` or an external module named `krabby-jshint`).
+The only thing that is actually _required_, the `name` parameter represents the file name of each test. This means either the files listed in the included [tests directory](https://github.com/patrickkettner/krabby/tree/master/lib/testers), or any module installed with a `krabby-` prefix (e.g. `jshint` means either the file in `tests/jshint.js` or an external module named `krabby-jshint`).
 
 #### files
 `files` is an array of strings. They can be [globs](http://en.wikipedia.org/wiki/Glob_%28programming%29) (`["./**/*.js"]`), or just regular paths pointing to specific files (`["./index.js"]`).
 
 #### testConfig
-`testConfig` can be any data format (string, array, object, etc) but is almost always an object. It is the canonical way to pass configuration from your krabby configuration to an underlying library (e.g. the [jshint task](https://github.com/patrickkettner/krabby/blob/master/tests/jshint.js) passes this to the [jshint library](http://jshint.com/docs/))
+`testConfig` can be any data format (string, array, object, etc) but is almost always an object. It is the canonical way to pass configuration from your krabby configuration to an underlying library (e.g. the [jshint task](https://github.com/patrickkettner/krabby/blob/master/lib/testers/jshint.js) passes this to the [jshint library](http://jshint.com/docs/))
 
 #### package.json vs. krabby.json
 npm [encourages you](http://blog.npmjs.org/post/101775448305/npm-and-front-end-packaging) to package.json all the things. Therefore you can place your config inside a `package.json` file, and as long as krabby is run from within the same project (meaning the folder the package.json file is in, or one of its child folders) krabby will automatically find and parse it. If you don't want to add a new field to your package.json, you can create a `krabby.json` file at the root of your project. The same run-in-the-same-project rules from the `pacakge.json` apply here, too.

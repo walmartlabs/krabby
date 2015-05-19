@@ -1,29 +1,29 @@
 var _ = require('lodash');
-var _baseTest = require('../../../../lib/tests/_baseTest.js');
+var _baseReport = require('../../../../lib/reporters/_baseReport.js');
 
-describe("lib/tests/_baseTest.js", function () {
+describe("lib/reporters/_baseReport.js", function () {
   describe('configuration', function() {
     it('should create a config property when no config is passed in', function() {
-      var FakeTester = _baseTest();
-      var fakeTester = new FakeTester();
+      var FakeReporter = _baseReport();
+      var fakeReporter = new FakeReporter();
 
-      assert(_.isEqual(fakeTester.config, {}));
+      assert(_.isEqual(fakeReporter.config, {}));
     });
     it('should create a config property when only runtimeConfig is passed in', function() {
       var runtimeTestConfig = { runtime: true };
 
-      var FakeTester = _baseTest();
-      var fakeTester = new FakeTester(runtimeTestConfig);
+      var FakeReporter = _baseReport();
+      var fakeReporter = new FakeReporter(runtimeTestConfig);
 
-      assert(_.isEqual(fakeTester.config, runtimeTestConfig));
+      assert(_.isEqual(fakeReporter.config, runtimeTestConfig));
     });
     it('should create a config property when only baseConfig is passed in', function() {
       var baseTestConfig = { base: true };
 
-      var FakeTester = _baseTest(baseTestConfig);
-      var fakeTester = new FakeTester();
+      var FakeReporter = _baseReport(baseTestConfig);
+      var fakeReporter = new FakeReporter();
 
-      assert(_.isEqual(fakeTester.config, baseTestConfig));
+      assert(_.isEqual(fakeReporter.config, baseTestConfig));
     });
     it('should not modify the config objects', function() {
       var baseTestConfig = {
@@ -43,8 +43,8 @@ describe("lib/tests/_baseTest.js", function () {
       var baseTestConfigCopy = JSON.parse(JSON.stringify(baseTestConfig));
       var runtimeTestConfigCopy = JSON.parse(JSON.stringify(runtimeTestConfig));
 
-      var FakeTester = _baseTest(baseTestConfig);
-      var fakeTester = new FakeTester(runtimeTestConfig);
+      var FakeReporter = _baseReport(baseTestConfig);
+      var fakeReporter = new FakeReporter(runtimeTestConfig);
 
       assert(_.isEqual(baseTestConfig, baseTestConfigCopy));
       assert(_.isEqual(runtimeTestConfig, runtimeTestConfigCopy));
@@ -65,32 +65,12 @@ describe("lib/tests/_baseTest.js", function () {
         }
       };
 
-      var FakeTester = _baseTest(baseTestConfig);
-      var fakeTester = new FakeTester(runtimeTestConfig);
+      var FakeReporter = _baseReport(baseTestConfig);
+      var fakeReporter = new FakeReporter(runtimeTestConfig);
 
-      assert(fakeTester.config.deep.common === "runtime");
-      assert(fakeTester.config.deep.bass === true);
-      assert(fakeTester.config.deep.runtime === true);
-    });
-  });
-  describe('default test method', function() {
-    it('should have a test method', function() {
-      var FakeTester = _baseTest();
-      var fakeTester = new FakeTester();
-
-      assert(_.isFunction(fakeTester.test));
-    });
-    it('should throw an Error when executed', function() {
-      var FakeTester = _baseTest();
-      var fakeTester = new FakeTester();
-
-      var error = false;
-      try {
-        fakeTester.test()
-      } catch (e) {
-        error = true;
-      }
-      assert(error);
+      assert(fakeReporter.config.deep.common === "runtime");
+      assert(fakeReporter.config.deep.bass === true);
+      assert(fakeReporter.config.deep.runtime === true);
     });
   });
 });
